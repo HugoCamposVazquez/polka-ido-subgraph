@@ -1,0 +1,48 @@
+specVersion: 0.0.2
+description: Ryu is launchapad for substrate based tokens
+repository: https://github.com/NodeFactoryIo/ryu-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SaleContractFactory
+    network: mbase
+    source:
+      address: '0xa57262dE99817A4c3844577B22008AFe5bbF1c0e'
+      abi: SaleContractFactory
+      startBlock: 369000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mapping.ts
+      entities:
+        - Swap
+      abis:
+        - name: SaleContractFactory
+          file: ./abis/SaleContractFactory.json
+      eventHandlers:
+        - event: CreatedSaleContract(address,(uint32,uint8),address)
+          handler: handleCreatedSaleContract
+
+  - kind: ethereum/contract
+    name: SaleContract
+    network: mbase
+    source:
+      abi: SaleContract
+      startBlock: 369000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mapping.ts
+      entities:
+        - Swap
+      abis:
+        - name: SaleContract
+          file: ./abis/SaleContract.json
+      eventHandlers:
+        - event: Claim(string,uint256,(uint32,uint8))
+          handler: handleClaim
+        - event: BuyTokens(address,uint256)
+          handler: handleBuyTokens
