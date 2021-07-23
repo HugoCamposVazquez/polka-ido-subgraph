@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+import { Address, BigInt } from "@graphprotocol/graph-ts";
 
 import {
   CreatedSaleContract
@@ -6,7 +6,8 @@ import {
 import {
   BuyTokens,
   Claim,
-  SaleContract
+  SaleContract,
+  SaleUpdated
 } from "./types/SaleContract/SaleContract"
 import {
   Allocation,
@@ -79,13 +80,37 @@ export function handleBuyTokens(event: BuyTokens): void {
 }
 
 export function handleClaim(event: Claim): void {
-  const user = User.load(event.transaction.from.toHexString());
+  const sale = Sale.load(event.transaction.to.toHexString());
+  if (sale == null) {
+    return;
+  }
 
+  const user = User.load(event.transaction.from.toHexString());
   const claim = new TokenClaim(event.transaction.hash.toHexString());
+
   claim.user = user.id;
   claim.statemintReceiver = event.params.statemintReceiver;
   claim.amount = event.params.amount;
   claim.token = event.params.token.tokenID.toString();
 
   claim.save()
+}
+
+export function handleSaleUpdate(event: SaleUpdated): void {
+  const sale = Sale.load(event.transaction.to.toHexString());
+  if (sale == null) {
+    return;
+  }
+
+  const contract = SaleContract.bind(event.transaction.to as Address);
+
+  sale.endDate = contract.endTime();
+  sale.startDate = contract.startTime();
+  sale.salePrice = contract.salePrice();
+  sale.whitelisted = contract.whitelist();
+  sale.metadataURI = contract.metadataURI();
+  sale.maxDepositAmount = contract.maxDepositAmount();
+  sale.currentDepositAmount = contract.currentDeposit();
+
+  sale.save();
 }

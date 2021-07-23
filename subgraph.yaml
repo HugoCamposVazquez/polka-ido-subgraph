@@ -8,7 +8,7 @@ dataSources:
     name: SaleContractFactory
     network: mbase
     source:
-      address: '0xa57262dE99817A4c3844577B22008AFe5bbF1c0e'
+      address: '0x006a6a4d52863f91ed3Ffe3c6042Eecf2348E328'
       abi: SaleContractFactory
       startBlock: 369000
     mapping:
@@ -20,7 +20,9 @@ dataSources:
         - Swap
       abis:
         - name: SaleContractFactory
-          file: ./abis/SaleContractFactory.json
+          file: ./node_modules/@nodefactoryio/ryu-contracts/artifacts/contracts/SaleContractFactory.sol/SaleContractFactory.json
+        - name: SaleContract
+          file: ./node_modules/@nodefactoryio/ryu-contracts/artifacts/contracts/SaleContract.sol/SaleContract.json
       eventHandlers:
         - event: CreatedSaleContract(address,(uint32,uint8),address)
           handler: handleCreatedSaleContract
@@ -39,10 +41,14 @@ dataSources:
       entities:
         - Swap
       abis:
+        - name: SaleContractFactory
+          file: ./node_modules/@nodefactoryio/ryu-contracts/artifacts/contracts/SaleContractFactory.sol/SaleContractFactory.json
         - name: SaleContract
-          file: ./abis/SaleContract.json
+          file: ./node_modules/@nodefactoryio/ryu-contracts/artifacts/contracts/SaleContract.sol/SaleContract.json
       eventHandlers:
         - event: Claim(string,uint256,(uint32,uint8))
           handler: handleClaim
         - event: BuyTokens(address,uint256)
           handler: handleBuyTokens
+        - event: SaleUpdated()
+          handler: handleSaleUpdate
