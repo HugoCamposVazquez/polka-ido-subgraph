@@ -110,7 +110,6 @@ export function handleSaleUpdate(event: SaleUpdated): void {
   sale.whitelisted = contract.whitelist();
   sale.metadataURI = contract.metadataURI();
   sale.maxDepositAmount = contract.maxDepositAmount();
-  sale.currentDepositAmount = contract.currentDeposit();
 
   sale.save();
 }
