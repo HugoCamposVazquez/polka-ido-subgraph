@@ -46,6 +46,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Codegen
+        run: yarn run codegen
+
       - name: Deploy
         run: yarn run graph deploy mpetrun5/Ryu --access-token ${{ secrets.SUBGRAPH_AUTH_TOKEN }} --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/ --debug
 
