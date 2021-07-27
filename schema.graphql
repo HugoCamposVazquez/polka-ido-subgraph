@@ -1,0 +1,52 @@
+type Platform @entity {
+  id: ID!
+  numOfProjects: Int!
+  numOfUsers: Int!
+  fundsRaised: BigInt!
+}
+
+type Token @entity {
+  id: ID!
+  decimals: Int!
+}
+
+type Sale @entity {
+  # Contract address
+	id: ID!
+
+  token: Token!
+
+  salePrice: BigInt
+  startDate: BigInt
+  endDate: BigInt
+  whitelisted: Boolean
+  featured: Boolean
+  metadataURI: String
+  maxDepositAmount: BigInt
+  currentDepositAmount: BigInt
+
+  allocations: [Allocation!]! @derivedFrom(field: "sale")
+}
+
+type User @entity {
+  id: ID!
+
+  allocations: [Allocation!]! @derivedFrom(field: "user")
+  claims: [TokenClaim!]! @derivedFrom(field: "user")
+}
+
+type Allocation @entity {
+  id: ID!
+  amount: BigInt!
+
+  user: User!
+  sale: Sale!
+}
+
+type TokenClaim @entity {
+  id: ID!
+  user: User!
+  statemintReceiver: String!
+  amount: BigInt!
+  token: Token!
+}

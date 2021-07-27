@@ -1,0 +1,54 @@
+specVersion: 0.0.2
+description: Ryu is launchapad for substrate based tokens
+repository: https://github.com/NodeFactoryIo/ryu-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SaleContractFactory
+    network: mbase
+    source:
+      address: '0xC777494A3F1B19b114Ea0146503D2E6d24e124Bc'
+      abi: SaleContractFactory
+      startBlock: 389000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mapping.ts
+      entities:
+        - Swap
+      abis:
+        - name: SaleContractFactory
+          file: ./node_modules/@nodefactoryio/ryu-contracts/artifacts/contracts/SaleContractFactory.sol/SaleContractFactory.json
+        - name: SaleContract
+          file: ./node_modules/@nodefactoryio/ryu-contracts/artifacts/contracts/SaleContract.sol/SaleContract.json
+      eventHandlers:
+        - event: CreatedSaleContract(address,(uint32,uint8),address)
+          handler: handleCreatedSaleContract
+
+  - kind: ethereum/contract
+    name: SaleContract
+    network: mbase
+    source:
+      abi: SaleContract
+      startBlock: 389000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mapping.ts
+      entities:
+        - Swap
+      abis:
+        - name: SaleContractFactory
+          file: ./node_modules/@nodefactoryio/ryu-contracts/artifacts/contracts/SaleContractFactory.sol/SaleContractFactory.json
+        - name: SaleContract
+          file: ./node_modules/@nodefactoryio/ryu-contracts/artifacts/contracts/SaleContract.sol/SaleContract.json
+      eventHandlers:
+        - event: Claim(string,uint256,(uint32,uint8))
+          handler: handleClaim
+        - event: BuyTokens(address,uint256)
+          handler: handleBuyTokens
+        - event: SaleUpdated()
+          handler: handleSaleUpdate
