@@ -30,7 +30,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - run: rm .npmrc
+
       - name: Setup Nodejs
         uses: actions/setup-node@v1
         with:
