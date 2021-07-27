@@ -30,13 +30,38 @@ export function handleCreatedSaleContract(event: CreatedSaleContract): void {
   const sale = new Sale(event.params.tokenSaleAddress.toHexString());
   const contract = SaleContract.bind(event.params.tokenSaleAddress);
 
-  sale.endDate = contract.endTime();
-  sale.startDate = contract.startTime();
-  sale.salePrice = contract.salePrice();
-  sale.whitelisted = contract.whitelist();
-  sale.metadataURI = contract.metadataURI();
-  sale.maxDepositAmount = contract.maxDepositAmount();
-  sale.currentDepositAmount = contract.currentDeposit();
+  const salePriceCall = contract.try_salePrice();
+  if (!salePriceCall.reverted) {
+    sale.salePrice = salePriceCall.value;
+  }
+  const whitelistCall = contract.try_whitelist();
+  if (!whitelistCall.reverted) {
+    sale.whitelisted = whitelistCall.value;
+  }
+  const metadataCall = contract.try_metadataURI();
+  if (!metadataCall.reverted) {
+    sale.metadataURI = metadataCall.value;
+  }
+  const maxDepositAmountCall = contract.try_maxDepositAmount();
+  if (!maxDepositAmountCall.reverted) {
+    sale.maxDepositAmount = maxDepositAmountCall.value;
+  }
+  const currentDepositAmountCall = contract.try_currentDeposit();
+  if (!currentDepositAmountCall.reverted) {
+    sale.currentDepositAmount = currentDepositAmountCall.value;
+  }
+  const featuredCall = contract.try_isFeatured();
+  if (!featuredCall.reverted) {
+    sale.featured = featuredCall.value;
+  }
+  const startDateCall = contract.try_startTime();
+  if (!startDateCall.reverted) {
+    sale.startDate = startDateCall.value;
+  }
+  const endDateCall = contract.try_endTime();
+  if (!endDateCall.reverted) {
+    sale.endDate = endDateCall.value;
+  }
 
   let token = Token.load(event.params.token.tokenID.toString());
   if (token == null) {
@@ -61,6 +86,7 @@ export function handleBuyTokens(event: BuyTokens): void {
     return;
   }
 
+
   let user = User.load(event.params.user.toHexString());
   if (user == null) {
     user = new User(event.params.user.toHexString());
@@ -73,7 +99,9 @@ export function handleBuyTokens(event: BuyTokens): void {
   allocation.user = user.id;
 
   platform.fundsRaised = platform.fundsRaised.plus(allocation.amount);
+  sale.currentDepositAmount = sale.currentDepositAmount.plus(allocation.amount);
 
+  sale.save();
   platform.save();
   allocation.save();
   user.save();
@@ -103,13 +131,34 @@ export function handleSaleUpdate(event: SaleUpdated): void {
   }
 
   const contract = SaleContract.bind(event.transaction.to as Address);
-
-  sale.endDate = contract.endTime();
-  sale.startDate = contract.startTime();
-  sale.salePrice = contract.salePrice();
-  sale.whitelisted = contract.whitelist();
-  sale.metadataURI = contract.metadataURI();
-  sale.maxDepositAmount = contract.maxDepositAmount();
+  const salePriceCall = contract.try_salePrice();
+  if (!salePriceCall.reverted) {
+    sale.salePrice = salePriceCall.value;
+  }
+  const whitelistCall = contract.try_whitelist();
+  if (!whitelistCall.reverted) {
+    sale.whitelisted = whitelistCall.value;
+  }
+  const metadataCall = contract.try_metadataURI();
+  if (!metadataCall.reverted) {
+    sale.metadataURI = metadataCall.value;
+  }
+  const maxDepositAmountCall = contract.try_maxDepositAmount();
+  if (!maxDepositAmountCall.reverted) {
+    sale.maxDepositAmount = maxDepositAmountCall.value;
+  }
+  const featuredCall = contract.try_isFeatured();
+  if (!featuredCall.reverted) {
+    sale.featured = featuredCall.value;
+  }
+  const startDateCall = contract.try_startTime();
+  if (!startDateCall.reverted) {
+    sale.startDate = startDateCall.value;
+  }
+  const endDateCall = contract.try_endTime();
+  if (!endDateCall.reverted) {
+    sale.endDate = endDateCall.value;
+  }
 
   sale.save();
 }

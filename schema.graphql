@@ -15,15 +15,15 @@ type Sale @entity {
 	id: ID!
 
   token: Token!
-  salePrice: BigInt!
 
-  startDate: BigInt!
-  endDate: BigInt!
-
-  whitelisted: Boolean!
-  metadataURI: String!
-  maxDepositAmount: BigInt!
-  currentDepositAmount: BigInt!
+  salePrice: BigInt
+  startDate: BigInt
+  endDate: BigInt
+  whitelisted: Boolean
+  featured: Boolean
+  metadataURI: String
+  maxDepositAmount: BigInt
+  currentDepositAmount: BigInt
 
   allocations: [Allocation!]! @derivedFrom(field: "sale")
 }
