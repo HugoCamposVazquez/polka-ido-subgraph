@@ -8,7 +8,7 @@ dataSources:
     name: SaleContractFactory
     network: mbase
     source:
-      address: '0xC777494A3F1B19b114Ea0146503D2E6d24e124Bc'
+      address: '0xb4Bb55091CD4a296Ccdb2780e979072eCd1bf88e'
       abi: SaleContractFactory
       startBlock: 389000
     mapping:
@@ -24,7 +24,7 @@ dataSources:
         - name: SaleContract
           file: ./node_modules/@nodefactoryio/ryu-contracts/artifacts/contracts/SaleContract.sol/SaleContract.json
       eventHandlers:
-        - event: CreatedSaleContract(address,(uint32,uint8),address)
+        - event: CreatedSaleContract(address,(uint32,uint8,string),address)
           handler: handleCreatedSaleContract
 
   - kind: ethereum/contract
@@ -46,7 +46,7 @@ dataSources:
         - name: SaleContract
           file: ./node_modules/@nodefactoryio/ryu-contracts/artifacts/contracts/SaleContract.sol/SaleContract.json
       eventHandlers:
-        - event: Claim(string,uint256,(uint32,uint8))
+        - event: Claim(string,uint256,(uint32,uint8,string))
           handler: handleClaim
         - event: BuyTokens(address,uint256)
           handler: handleBuyTokens
