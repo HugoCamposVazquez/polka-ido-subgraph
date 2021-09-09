@@ -8,7 +8,7 @@ dataSources:
     name: SaleContractFactory
     network: mbase
     source:
-      address: '0x91745cd25aFf55186bC922e7DA8bD96dFB9294Fa'
+      address: '0x16c28457fA66aE8c767Eb5990E210eAe5260B9C7'
       abi: SaleContractFactory
       startBlock: 389000
     mapping:
