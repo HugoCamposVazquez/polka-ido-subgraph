@@ -44,11 +44,19 @@ export function handleCreatedSaleContract(event: CreatedSaleContract): void {
   }
   const maxDepositAmountCall = contract.try_maxDepositAmount();
   if (!maxDepositAmountCall.reverted) {
-    sale.maxDepositAmount = maxDepositAmountCall.value;
+    sale.maxUserDepositAmount = maxDepositAmountCall.value;
+  }
+  const minDepositAmountCall = contract.try_minDepositAmount();
+  if (!minDepositAmountCall.reverted) {
+    sale.minUserDepositAmount = minDepositAmountCall.value;
   }
   const currentDepositAmountCall = contract.try_currentDeposit();
   if (!currentDepositAmountCall.reverted) {
     sale.currentDepositAmount = currentDepositAmountCall.value;
+  }
+  const totalDepositAmountCall = contract.try_totalDeposits();
+  if (!totalDepositAmountCall.reverted) {
+    sale.totalDepositAmount = totalDepositAmountCall.value;
   }
   const featuredCall = contract.try_isFeatured();
   if (!featuredCall.reverted) {
@@ -61,6 +69,11 @@ export function handleCreatedSaleContract(event: CreatedSaleContract): void {
   const endDateCall = contract.try_endTime();
   if (!endDateCall.reverted) {
     sale.endDate = endDateCall.value;
+  }
+  const vestingDateCall = contract.try_vestingConfig();
+  if (!vestingDateCall.reverted) {
+    sale.vestingStartDate = vestingDateCall.value.value0;
+    sale.vestingEndDate = vestingDateCall.value.value1;
   }
 
   let token = Token.load(event.params.token.tokenID.toString());
@@ -97,6 +110,7 @@ export function handleBuyTokens(event: BuyTokens): void {
   allocation.amount = event.params.amount;
   allocation.sale = sale.id;
   allocation.user = user.id;
+  allocation.timestamp = event.block.timestamp;
 
   platform.fundsRaised = platform.fundsRaised.plus(allocation.amount);
   sale.currentDepositAmount = sale.currentDepositAmount.plus(allocation.amount);
@@ -145,7 +159,11 @@ export function handleSaleUpdate(event: SaleUpdated): void {
   }
   const maxDepositAmountCall = contract.try_maxDepositAmount();
   if (!maxDepositAmountCall.reverted) {
-    sale.maxDepositAmount = maxDepositAmountCall.value;
+    sale.maxUserDepositAmount = maxDepositAmountCall.value;
+  }
+  const minDepositAmountCall = contract.try_minDepositAmount();
+  if (!minDepositAmountCall.reverted) {
+    sale.minUserDepositAmount = minDepositAmountCall.value;
   }
   const featuredCall = contract.try_isFeatured();
   if (!featuredCall.reverted) {
@@ -158,6 +176,11 @@ export function handleSaleUpdate(event: SaleUpdated): void {
   const endDateCall = contract.try_endTime();
   if (!endDateCall.reverted) {
     sale.endDate = endDateCall.value;
+  }
+  const vestingDateCall = contract.try_vestingConfig();
+  if (!vestingDateCall.reverted) {
+    sale.vestingStartDate = vestingDateCall.value.value0;
+    sale.vestingEndDate = vestingDateCall.value.value1;
   }
 
   sale.save();

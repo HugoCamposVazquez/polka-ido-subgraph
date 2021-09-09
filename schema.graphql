@@ -22,8 +22,15 @@ type Sale @entity {
   whitelisted: Boolean
   featured: Boolean
   metadataURI: String
-  maxDepositAmount: BigInt
+
+  vestingStartDate: BigInt
+  vestingEndDate: BigInt
+
+  minUserDepositAmount: BigInt
+  maxUserDepositAmount: BigInt
+
   currentDepositAmount: BigInt
+  totalDepositAmount: BigInt
 
   allocations: [Allocation!]! @derivedFrom(field: "sale")
 }
@@ -38,6 +45,7 @@ type User @entity {
 type Allocation @entity {
   id: ID!
   amount: BigInt!
+  timestamp: BigInt
 
   user: User!
   sale: Sale!
