@@ -70,16 +70,17 @@ export function handleCreatedSaleContract(event: CreatedSaleContract): void {
   if (!endDateCall.reverted) {
     sale.endDate = endDateCall.value;
   }
-  const vestingDateCall = contract.try_vestingConfig();
-  if (!vestingDateCall.reverted) {
-    sale.vestingStartDate = vestingDateCall.value.value0;
-    sale.vestingEndDate = vestingDateCall.value.value1;
+  const vestingCall = contract.try_vestingConfig();
+  if (!vestingCall.reverted) {
+    sale.vestingStartDate = vestingCall.value.value0;
+    sale.vestingEndDate = vestingCall.value.value1;
   }
 
   let token = Token.load(event.params.token.tokenID.toString());
   if (token == null) {
     token = new Token(event.params.token.tokenID.toString());
     token.decimals = event.params.token.decimals;
+    token.walletAddress = event.params.token.walletAddress;
     token.save();
   }
   sale.token = token.id;

@@ -8,6 +8,7 @@ type Platform @entity {
 type Token @entity {
   id: ID!
   decimals: Int!
+  walletAddress: String!
 }
 
 type Sale @entity {
