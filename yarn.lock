@@ -58,10 +58,10 @@
   dependencies:
     assemblyscript "https://github.com/AssemblyScript/assemblyscript#36040d5b5312f19a025782b5e36663823494c2f3"
 
-"@nodefactoryio/ryu-contracts@^0.5.0":
-  version "0.5.0"
-  resolved "https://npm.pkg.github.com/download/@nodefactoryio/ryu-contracts/0.5.0/1f3770421750129b38026f3d5728356d83835f30c94b1df568566c31b490ca67#fea4b519e3c80c957ecaab74cb3e6d3aac044044"
-  integrity sha512-Jy1yqQXIf2F4lgjxXyuonwLpRzzhJcw32jWYxGDyG8F5bD5ROkPgltzTVQt/MwT3NI3MWVIycZC0AaPakG10+Q==
+"@nodefactoryio/ryu-contracts@^0.6.0":
+  version "0.6.0"
+  resolved "https://npm.pkg.github.com/download/@nodefactoryio/ryu-contracts/0.6.0/45c8fd40f66494b52bc206ebaae7d7b554ffc642b2af8f1793dc268a9d209f6d#be83c7be9aabf1dbfffd15fe4c05c92b0b3f1ad7"
+  integrity sha512-+XA6iZAfeUSUPkErRWH3l9ckSPJ9+uEdKlK5eHZmp8obDe2a0GHh007f6DvaT9vmuyhWZiQd75pF17Vx1nJIfQ==
   dependencies:
     "@openzeppelin/contracts" "^4.1.0"
 

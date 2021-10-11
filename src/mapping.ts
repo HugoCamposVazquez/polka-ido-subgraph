@@ -54,9 +54,9 @@ export function handleCreatedSaleContract(event: CreatedSaleContract): void {
   if (!currentDepositAmountCall.reverted) {
     sale.currentDepositAmount = currentDepositAmountCall.value;
   }
-  const totalDepositAmountCall = contract.try_totalDeposits();
-  if (!totalDepositAmountCall.reverted) {
-    sale.totalDepositAmount = totalDepositAmountCall.value;
+  const capCall = contract.try_cap();
+  if (!capCall.reverted) {
+    sale.cap = capCall.value;
   }
   const featuredCall = contract.try_isFeatured();
   if (!featuredCall.reverted) {
@@ -182,6 +182,10 @@ export function handleSaleUpdate(event: SaleUpdated): void {
   if (!vestingDateCall.reverted) {
     sale.vestingStartDate = vestingDateCall.value.value0;
     sale.vestingEndDate = vestingDateCall.value.value1;
+  }
+  const capCall = contract.try_cap();
+  if (!capCall.reverted) {
+    sale.cap = capCall.value;
   }
 
   sale.save();
