@@ -76,13 +76,11 @@ export function handleCreatedSaleContract(event: CreatedSaleContract): void {
     sale.vestingEndDate = vestingCall.value.value1;
   }
 
-  let token = Token.load(event.params.token.tokenID.toString());
-  if (token == null) {
-    token = new Token(event.params.token.tokenID.toString());
-    token.decimals = event.params.token.decimals;
-    token.walletAddress = event.params.token.walletAddress;
-    token.save();
-  }
+  const token = new Token(event.params.tokenSaleAddress.toHexString() + "-" + event.params.token.tokenID.toString());
+  token.tokenID = event.params.token.tokenID;
+  token.decimals = event.params.token.decimals;
+  token.walletAddress = event.params.token.walletAddress;
+  token.save();
   sale.token = token.id;
 
   platform.numOfProjects += 1;
@@ -186,6 +184,14 @@ export function handleSaleUpdate(event: SaleUpdated): void {
   const capCall = contract.try_cap();
   if (!capCall.reverted) {
     sale.cap = capCall.value;
+  }
+  const tokenCall = contract.try_token()
+  if (!tokenCall.reverted) {
+    const token = Token.load(event.transaction.to.toString() + "-" + tokenCall.value.value0.toString())
+    token.tokenID = tokenCall.value.value0;
+    token.decimals = tokenCall.value.value1;
+    token.walletAddress = tokenCall.value.value2;
+    token.save();
   }
 
   sale.save();
