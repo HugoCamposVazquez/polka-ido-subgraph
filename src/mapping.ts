@@ -84,8 +84,8 @@ export function handleCreatedSaleContract(event: CreatedSaleContract): void {
   sale.token = token.id;
 
   platform.numOfProjects += 1;
-
   platform.save();
+
   sale.save();
   token.save();
 }
@@ -187,10 +187,16 @@ export function handleSaleUpdate(event: SaleUpdated): void {
   }
   const tokenCall = contract.try_token()
   if (!tokenCall.reverted) {
-    const token = Token.load(event.transaction.to.toString() + "-" + tokenCall.value.value0.toString())
+    let token = Token.load(event.transaction.to.toString() + "-" + tokenCall.value.value0.toString())
+    if (token == null) {
+      token = new Token(event.transaction.to.toString() + "-" + tokenCall.value.value0.toString());
+    }
+
     token.tokenID = tokenCall.value.value0;
     token.decimals = tokenCall.value.value1;
     token.walletAddress = tokenCall.value.value2;
+
+    sale.token = token.id;
     token.save();
   }
 
