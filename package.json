@@ -1,6 +1,6 @@
 {
   "name": "ryu-subgraph",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "repository": "https://github.com/NodefactoryIo/ryu-subgraph",
   "scripts": {
     "codegen": "graph codegen --output-dir src/types/",
